@@ -64,4 +64,18 @@ public class TaskController {
                 taskRepo.deleteById(task.getId())
         );
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(toList());
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("messages", errors);
+        return body;
+    }
 }
