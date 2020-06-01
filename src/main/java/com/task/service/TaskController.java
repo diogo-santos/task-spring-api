@@ -33,4 +33,35 @@ public class TaskController {
     public List<TaskDto> findByUserId(@PathVariable final Long userId) {
         return this.taskRepo.findAllByUserId(userId);
     }
+
+    @PostMapping("/user/{userId}/tasks")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create task", notes = "Create a single task in the system", nickname = "createTask")
+    public Task create(@PathVariable final Long userId, @RequestBody @Validated final CreateTaskDto taskDto) {
+        Task task = new Task();
+        task.setUserId(userId);
+        task.setDescription(taskDto.getDescription());
+        task.setChecked(false);
+        return this.taskRepo.save(task);
+    }
+
+    @PutMapping("/user/{userId}/tasks/{taskId}/status")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update task status", notes = "Check/Uncheck a task", nickname = "updateTaskStatus")
+    public void updateStatus(@PathVariable final Long userId, @PathVariable final Long taskId) {
+        Optional<TaskDto> taskOptional = taskRepo.findByIdAndUserId(taskId, userId);
+        taskOptional.ifPresent(task ->
+            taskRepo.updateTaskStatus(task.getId())
+        );
+    }
+
+    @DeleteMapping("/user/{userId}/tasks/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete task", notes = "Delete a task", nickname = "deleteTask")
+    public void delete(@PathVariable final Long userId, @PathVariable final Long taskId) {
+        Optional<TaskDto> taskOptional = taskRepo.findByIdAndUserId(taskId, userId);
+        taskOptional.ifPresent(task ->
+                taskRepo.deleteById(task.getId())
+        );
+    }
 }
