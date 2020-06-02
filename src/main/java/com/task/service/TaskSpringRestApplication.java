@@ -22,7 +22,7 @@ public class TaskSpringRestApplication {
 	public Docket swaggerApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.tasks.services"))
+				.apis(RequestHandlerSelectors.basePackage("com.task.service"))
 				.paths(PathSelectors.any())
 				.build()
 				.apiInfo(new ApiInfoBuilder()
