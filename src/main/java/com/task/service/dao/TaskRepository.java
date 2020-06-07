@@ -12,11 +12,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Optional<TaskDto> findByIdAndUserId(Long id, Long userId);
 
-    default void updateTaskStatus(Long id) {
-        this.findById(id).ifPresent(task -> {
-            boolean checked = task.getChecked() == null || !task.getChecked();
-            task.setChecked(checked);
-            this.saveAndFlush(task);
-        });
+    default void updateStatus(Long id) {
+        Task task = this.getOne(id);
+        boolean checked = task.getChecked() == null || !task.getChecked();
+        task.setChecked(checked);
+        this.saveAndFlush(task);
     }
 }
