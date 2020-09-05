@@ -1,8 +1,6 @@
 # task-spring-api
 Rest service for Task domain
 
-Check API documentation at: https://task-spring-api.herokuapp.com/swagger-ui.html
-
 ## Getting the code on your computer
 - [ ] Java 1.8
 - [ ] Maven 3.0+
